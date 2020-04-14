@@ -28,13 +28,15 @@ namespace AnalyzerPublicFields
             {
                 return ImmutableArray.Create(
                     BooleanPropsNameAnalyzer.Rule, 
-                    SimpleInterfaceAnalizer.Rule
+                    SimpleInterfaceAnalizer.Rule,
+                    OneFileOneClass.Rule
                   );
             }
         }
 
         public override void Initialize(AnalysisContext context)
         {
+            context.RegisterSyntaxNodeAction(OneFileOneClass.Analyze, SyntaxKind.NamespaceDeclaration);
             context.RegisterSyntaxNodeAction(BooleanPropsNameAnalyzer.Analyze, SyntaxKind.PropertyDeclaration);
             context.RegisterSyntaxNodeAction(SimpleInterfaceAnalizer.Analyze, SyntaxKind.InterfaceDeclaration);
         }
