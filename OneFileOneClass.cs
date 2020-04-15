@@ -29,8 +29,15 @@ namespace AnalyzerPublicFields
               .ChildNodes()
               .Count(t => t.IsKind(SyntaxKind.ClassDeclaration)) > 1)
            {
-               var diagnostic = Diagnostic.Create(Rule, namespaceDeclaration.GetLocation(), namespaceDeclaration.GetText());
-               context.ReportDiagnostic(diagnostic);
+                var firtsClass = namespaceDeclaration
+                    .ChildNodes()
+                    .First(n => n.IsKind(SyntaxKind.ClassDeclaration));
+
+                if(firtsClass != null)
+                {
+                     var diagnostic = Diagnostic.Create(Rule, firtsClass.GetLocation(), firtsClass.GetText());
+                     context.ReportDiagnostic(diagnostic);
+                }
             }
         }
     }
