@@ -46,27 +46,31 @@ namespace AnalyzerPublicFields
         public static void Analyze(SyntaxNodeAnalysisContext context)
         {
             var methodDeclaration = context.Node as MethodDeclarationSyntax;
-            var methodBlock = methodDeclaration
-                                        .ChildNodes()
-                                        .First(n => n.IsKind(SyntaxKind.Block));
-            if (methodBlock != null) return;
 
+            var methodBlock = methodDeclaration.ChildNodes().First(n => n.IsKind(SyntaxKind.Block));
+            //if (methodBlock != null) return;
+
+
+            if (methodBlock == null) return;
 
             totalCount = 0;
 
+            
             GetContInDeep(methodBlock, SyntaxKind.EndOfLineTrivia);
 
-
-            if(totalCount > 50)
+            if(totalCount > 20)
             {
-                var diagnostic = Diagnostic.Create(
+            var diagnostic = Diagnostic.Create(
                 Rule,
                 methodDeclaration.GetLocation(),
-                methodDeclaration.GetText()
+                methodDeclaration.GetText(),
+                totalCount
                 );
 
                 context.ReportDiagnostic(diagnostic);
-            } 
+            }
+
+
 
         }
     }
