@@ -29,17 +29,33 @@ namespace AnalyzerPublicFields
                 return ImmutableArray.Create(
                     BooleanPropsNameAnalyzer.Rule, 
                     SimpleInterfaceAnalizer.Rule,
-                    OneFileOneClass.Rule
+                    OneFileOneCore.Rule,
+                    EnumCheck.Rule,
+                    DTOCheck.Rule,
+                    CommentAnalyze.Rule,
+                    ToSelectOptimization.Rule,
+                    NestedEnumAndClass.Rule,
+                    PropertyModifiersAnalyzer.Rule
                   );
             }
         }
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(OneFileOneClass.Analyze, SyntaxKind.NamespaceDeclaration);
             context.RegisterSyntaxNodeAction(BooleanPropsNameAnalyzer.Analyze, SyntaxKind.PropertyDeclaration);
             context.RegisterSyntaxNodeAction(SimpleInterfaceAnalizer.Analyze, SyntaxKind.InterfaceDeclaration);
-        }
+            context.RegisterSyntaxNodeAction(EnumCheck.Analyze, SyntaxKind.EnumDeclaration);
+            context.RegisterSyntaxNodeAction(MethodBodyAnalyze.Analyze, SyntaxKind.MethodDeclaration);
+            
+            context.RegisterSyntaxNodeAction(ToSelectOptimization.Analyze, SyntaxKind.InvocationExpression);
 
+            context.RegisterSyntaxNodeAction(OneFileOneCore.Analyze, SyntaxKind.NamespaceDeclaration);
+            context.RegisterSyntaxNodeAction(NestedEnumAndClass.Analyze, SyntaxKind.ClassDeclaration);
+
+            context.RegisterSyntaxNodeAction(DTOCheck.Analyze, SyntaxKind.ClassDeclaration);
+
+            context.RegisterSyntaxNodeAction(PropertyModifiersAnalyzer.Analyze, SyntaxKind.PropertyDeclaration);
+
+        }
     }
 }
